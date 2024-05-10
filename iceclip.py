@@ -131,6 +131,8 @@ class AudioRecorderApp:
         self.buffer_size_label.pack(side=tk.LEFT, padx=5)
         self.buffer_size_entry = tk.Entry(buffer_size_container, width=10, textvariable=self.buffer_size_minutes)
         self.buffer_size_entry.pack(pady=5)
+        # enfore integer input
+        self.buffer_size_entry.config(validate="key", validatecommand=(self.buffer_size_entry.register(lambda s: s.isdigit()), "%S"))
         buffer_size_container.pack()
 
         self.status_label = tk.Label(master, text="", font=LABEL_STYLE)
