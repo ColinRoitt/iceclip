@@ -1,0 +1,2 @@
+Requests==2.31.0
+show-in-file-manager==1.1.5
