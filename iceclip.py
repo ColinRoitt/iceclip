@@ -106,13 +106,13 @@ class AudioRecorderApp:
         self.separator.pack(fill='x', padx=50, pady=20)
         
         player_container = tk.Frame(master)
-        self.connect_button = tk.Button(player_container, text="▶", command=self.connect, font=ICON_BUTTON_STYLE)
-        self.connect_button.pack(pady=5, side=tk.LEFT)
-        self.disconnect_button = tk.Button(player_container, text="■", command=self.disconnect, state=tk.DISABLED, font=ICON_BUTTON_STYLE)
-        self.disconnect_button.pack(pady=5)
+        self.connect_button = tk.Button(player_container, text="▶", command=self.connect, font=ICON_BUTTON_STYLE, disabledforeground="grey75")
+        self.connect_button.pack(pady=10, side=tk.LEFT)
+        self.disconnect_button = tk.Button(player_container, text="■", command=self.disconnect, state=tk.DISABLED, font=ICON_BUTTON_STYLE, disabledforeground="grey75")
+        self.disconnect_button.pack(pady=10)
         player_container.pack()
 
-        self.clip_button = tk.Button(master, text="Save Clip", command=self.save_clip, state=tk.DISABLED, height=2, width=10, font=LARGE_BUTTON_STYLE)
+        self.clip_button = tk.Button(master, text="Save Clip", command=self.save_clip, state=tk.DISABLED, height=2, width=10, font=LARGE_BUTTON_STYLE, disabledforeground="grey75")
         self.clip_button.pack(ipadx=10, pady=5)
 
         self.output_folder_entry = tk.Label(master, text="Tip: You can use the 'enter' key to quickly save a clip", justify=tk.LEFT, font=VALUE_STYLE)
@@ -201,6 +201,7 @@ class AudioRecorderApp:
         self.disconnect_button.config(state=tk.NORMAL)
         self.clip_button.config(state=tk.NORMAL)
         self.buffer_size_entry.config(state=tk.DISABLED)
+        self.url_entry.config(state=tk.DISABLED)
     
     def disconnect(self):
         # self.audio_capture_thread.join()
@@ -210,6 +211,7 @@ class AudioRecorderApp:
         self.disconnect_button.config(state=tk.DISABLED)
         self.clip_button.config(state=tk.DISABLED)
         self.buffer_size_entry.config(state=tk.NORMAL)
+        self.url_entry.config(state=tk.NORMAL)
         self.audio_buffer = []
         self.update_progress()
 
