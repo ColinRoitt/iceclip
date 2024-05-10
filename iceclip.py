@@ -8,6 +8,7 @@ from tkinter import messagebox
 from tkinter import ttk
 from tkinter import filedialog
 import sys
+import configparser
 
 APP_NAME = "IceClipper"
 FONT = "Arial"
@@ -22,6 +23,8 @@ DEFAULT_ICECAST_URL = "https://audio.ury.org.uk/live-high"
 DEFAULT_BUFFER_SIZE = 2
 DEFAULT_PATH = "saved_clips"
 DEFAULT_FILE_PREFIX = "audio"
+
+CONFIG = "config.ini"
 
 class AudioRecorderApp:
     def __init__(self, master):
@@ -64,7 +67,11 @@ class AudioRecorderApp:
 
         self.file_prefix = tk.StringVar()
         self.file_prefix.set(DEFAULT_FILE_PREFIX)
+        
+        self.config = self.init_config()
+        self.build_ui(master)
 
+    def build_ui(self, master):
         # DEFINE UI ELEMENTS
         heading_container = tk.Frame(master)
         # self.icon_label = tk.Label(heading_container, image=self.icon, width=30)
@@ -128,6 +135,39 @@ class AudioRecorderApp:
 
         self.status_label = tk.Label(master, text="", font=LABEL_STYLE)
         self.status_label.pack(pady=10, padx=5)
+
+    def save_settings(self, setting, value):
+        config = configparser.ConfigParser()
+        config.read(CONFIG)
+        config.set("DEFAULT", setting, value)
+        with open(CONFIG, "w") as f:
+            config.write(f)
+    
+    def init_config(self):
+        # if no config file create one
+        if not os.path.exists(CONFIG):
+            with open(CONFIG, "w") as f:
+                f.write("[DEFAULT]\n")
+                f.write(f"ICECAST_URL={DEFAULT_ICECAST_URL}\n")
+                f.write(f"BUFFER_SIZE={DEFAULT_BUFFER_SIZE}\n")
+                f.write(f"OUTPUT_FOLDER={DEFAULT_PATH}\n")
+                f.write(f"FILE_PREFIX={DEFAULT_FILE_PREFIX}\n")
+
+        # load settings
+        config = configparser.ConfigParser()
+        config.read(CONFIG)
+        self.ICECAST_URL.set(config.get("DEFAULT", "ICECAST_URL"))
+        self.buffer_size_minutes.set(int(config.get("DEFAULT", "BUFFER_SIZE")))
+        self.output_folder.set(config.get("DEFAULT", "OUTPUT_FOLDER"))
+        self.file_prefix.set(config.get("DEFAULT", "FILE_PREFIX"))
+
+        # save each setting when changes
+        self.ICECAST_URL.trace_add("write", lambda *args: self.save_settings("ICECAST_URL", self.ICECAST_URL.get()))
+        self.buffer_size_minutes.trace_add("write", lambda *args: self.save_settings("BUFFER_SIZE", self.buffer_size_minutes.get()))
+        self.output_folder.trace_add("write", lambda *args: self.save_settings("OUTPUT_FOLDER", self.output_folder.get()))
+        self.file_prefix.trace_add("write", lambda *args: self.save_settings("FILE_PREFIX", self.file_prefix.get()))
+
+        return config
     
     def get_max_buffer_size(self):
         return int((self.buffer_size_minutes.get() / 2) * 60 * self.SAMPLE_RATE / self.CHUNK_SIZE)
