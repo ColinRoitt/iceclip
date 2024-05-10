@@ -17,6 +17,12 @@ VALUE_STYLE = (FONT, 10)
 LARGE_BUTTON_STYLE = (FONT, 18)
 ICON_BUTTON_STYLE = (FONT, 20)
 
+# Default values
+DEFAULT_ICECAST_URL = "https://audio.ury.org.uk/live-high"
+DEFAULT_BUFFER_SIZE = 1
+DEFAULT_PATH = "saved_clips"
+DEFAULT_FILE_PREFIX = "audio"
+
 class AudioRecorderApp:
     def __init__(self, master):
         self.master = master
@@ -35,7 +41,7 @@ class AudioRecorderApp:
 
         # Icecast stream URL without trailing slash
         self.ICECAST_URL = tk.StringVar()
-        self.ICECAST_URL.set('https://audio.ury.org.uk/live-high')
+        self.ICECAST_URL.set(DEFAULT_ICECAST_URL)
 
         # Sample rate
         self.SAMPLE_RATE = 48000
@@ -45,7 +51,7 @@ class AudioRecorderApp:
 
         # Buffer size in minutes
         self.buffer_size_minutes = tk.IntVar()
-        self.buffer_size_minutes.set(1)
+        self.buffer_size_minutes.set(DEFAULT_BUFFER_SIZE)
 
         # Flag to indicate when to stop
         self.stop_flag = True
@@ -54,10 +60,10 @@ class AudioRecorderApp:
         self.audio_capture_thread = None
 
         self.output_folder = tk.StringVar()
-        self.output_folder.set('saved_clips')
+        self.output_folder.set(DEFAULT_PATH)
 
         self.file_prefix = tk.StringVar()
-        self.file_prefix.set('audio')
+        self.file_prefix.set(DEFAULT_FILE_PREFIX)
 
         # DEFINE UI ELEMENTS
         heading_container = tk.Frame(master)
