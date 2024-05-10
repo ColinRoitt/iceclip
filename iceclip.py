@@ -19,7 +19,7 @@ ICON_BUTTON_STYLE = (FONT, 20)
 
 # Default values
 DEFAULT_ICECAST_URL = "https://audio.ury.org.uk/live-high"
-DEFAULT_BUFFER_SIZE = 1
+DEFAULT_BUFFER_SIZE = 2
 DEFAULT_PATH = "saved_clips"
 DEFAULT_FILE_PREFIX = "audio"
 
