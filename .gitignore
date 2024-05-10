@@ -3,3 +3,5 @@ saved_clips/*
 *.spec
 dist/*
 build/*
+env/*
+.DS_Store
