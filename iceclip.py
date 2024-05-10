@@ -53,7 +53,7 @@ class AudioRecorderApp:
         self.CHUNK_SIZE = 1024
 
         # Buffer size in minutes
-        self.buffer_size_minutes = tk.IntVar()
+        self.buffer_size_minutes = tk.StringVar()
         self.buffer_size_minutes.set(DEFAULT_BUFFER_SIZE)
 
         # Flag to indicate when to stop
@@ -139,7 +139,7 @@ class AudioRecorderApp:
     def save_settings(self, setting, value):
         config = configparser.ConfigParser()
         config.read(CONFIG)
-        config.set("DEFAULT", setting, value)
+        config.set("DEFAULT", setting, str(value))
         with open(CONFIG, "w") as f:
             config.write(f)
     
@@ -157,11 +157,11 @@ class AudioRecorderApp:
         config = configparser.ConfigParser()
         config.read(CONFIG)
         self.ICECAST_URL.set(config.get("DEFAULT", "ICECAST_URL"))
-        self.buffer_size_minutes.set(int(config.get("DEFAULT", "BUFFER_SIZE")))
+        self.buffer_size_minutes.set(config.get("DEFAULT", "BUFFER_SIZE"))
         self.output_folder.set(config.get("DEFAULT", "OUTPUT_FOLDER"))
         self.file_prefix.set(config.get("DEFAULT", "FILE_PREFIX"))
 
-        # save each setting when changes
+        # save setting on write of variable
         self.ICECAST_URL.trace_add("write", lambda *args: self.save_settings("ICECAST_URL", self.ICECAST_URL.get()))
         self.buffer_size_minutes.trace_add("write", lambda *args: self.save_settings("BUFFER_SIZE", self.buffer_size_minutes.get()))
         self.output_folder.trace_add("write", lambda *args: self.save_settings("OUTPUT_FOLDER", self.output_folder.get()))
@@ -170,7 +170,8 @@ class AudioRecorderApp:
         return config
     
     def get_max_buffer_size(self):
-        return int((self.buffer_size_minutes.get() / 2) * 60 * self.SAMPLE_RATE / self.CHUNK_SIZE)
+        int_buffer = int(self.buffer_size_minutes.get())
+        return int((int_buffer / 2) * 60 * self.SAMPLE_RATE / self.CHUNK_SIZE)
 
     def connect(self):
         url = self.ICECAST_URL.get()
