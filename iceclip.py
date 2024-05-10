@@ -9,6 +9,7 @@ from tkinter import ttk
 from tkinter import filedialog
 import sys
 import configparser
+from showinfm import show_in_file_manager
 
 APP_NAME = "IceClipper"
 FONT = "Arial"
@@ -92,8 +93,12 @@ class AudioRecorderApp:
         self.output_folder_entry = tk.Label(master, width=50, wraplength=300, textvariable=self.output_folder, justify=tk.LEFT, font=VALUE_STYLE)
         self.output_folder_entry.pack()
 
-        self.output_folder_button = tk.Button(master, text="Change Folder", command=self.change_output_folder)
-        self.output_folder_button.pack(pady=5)
+        self.folder_container = tk.Frame(master)
+        self.output_folder_button = tk.Button(self.folder_container, text="Change Folder", command=self.change_output_folder)
+        self.output_folder_button.pack(pady=5, side=tk.LEFT, padx=5)
+        self.show_output_folder_button = tk.Button(self.folder_container, text="Show Folder", command=self.show_folder)
+        self.show_output_folder_button.pack(pady=5, side=tk.LEFT, padx=5)
+        self.folder_container.pack()
 
         clip_name_container = tk.Frame(master)
         self.file_prefix_label = tk.Label(clip_name_container, text="Clip Name Prefix:", justify=tk.LEFT, font=LABEL_STYLE)
@@ -239,6 +244,11 @@ class AudioRecorderApp:
         folder = filedialog.askdirectory()
         if folder:
             self.output_folder.set(folder)
+    
+    def show_folder(self):
+        folder_path = self.output_folder.get()
+        if folder_path:
+            show_in_file_manager(folder_path)
             
     def save_clip(self):
         threading.Thread(target=self.save_audio_clip).start()
