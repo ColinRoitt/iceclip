@@ -1,4 +1,4 @@
-# IceCLip
+# IceClip
 A quick UI for snipping audio clips from Icecast streams live
 
 ## Usage
