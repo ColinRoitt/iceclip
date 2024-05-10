@@ -1,2 +1,5 @@
 saved_clips/*
-config.*
+*.ini
+*.spec
+dist/*
+build/*
